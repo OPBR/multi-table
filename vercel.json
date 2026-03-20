@@ -1,8 +1,0 @@
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm --filter @multi-table/shared build && pnpm --filter @multi-table/core build && pnpm --filter @multi-table/vue build && pnpm --filter @multi-table/docs build",
-  "devCommand": "pnpm dev",
-  "installCommand": "pnpm install",
-  "outputDirectory": "packages/docs/dist",
-  "framework": null
-}

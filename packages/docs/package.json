@@ -6,7 +6,7 @@
   "description": "Documentation and demo site for multi-table",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build",
+    "build": "cd .. && pnpm --filter @multi-table/shared build && pnpm --filter @multi-table/core build && cd docs && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
