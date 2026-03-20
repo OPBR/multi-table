@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "pnpm build:shared && pnpm build:core && pnpm build:vue && pnpm build:docs",
+  "devCommand": "pnpm dev",
+  "installCommand": "pnpm install",
+  "outputDirectory": "packages/docs/dist",
+  "framework": "vite"
+}
