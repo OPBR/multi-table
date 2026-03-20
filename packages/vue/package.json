@@ -1,0 +1,51 @@
+{
+  "name": "@multi-table/vue",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Vue 3 multi-dimensional table component",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      },
+      "style": "./dist/style.css"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build:types": "vue-tsc --emitDeclarationOnly",
+    "build": "tsdown && pnpm build:types",
+    "dev": "tsdown --watch"
+  },
+  "peerDependencies": {
+    "vue": ">=3.0.0"
+  },
+  "dependencies": {
+    "@multi-table/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@tsdown/css": "^0.21.4",
+    "tsdown": "^0.21.4",
+    "typescript": "^5.9.3",
+    "unplugin-vue": "^7.1.1",
+    "vue": "^3.5.30",
+    "vue-tsc": "^3.2.6"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "table",
+    "multi-dimensional"
+  ],
+  "license": "MIT"
+}
