@@ -1,11 +1,20 @@
 // Types
 export type {
-  TableColumn,
-  TableRow,
-  TableProps,
-  CellProps,
+  FieldType,
+  SelectOption,
+  Column,
+  CellValue,
+  Cell,
+  Row,
+  TableData,
+  SelectionRange,
+  Selection,
+  TableState,
+  OperationType,
+  Operation,
+  TablePropsBase,
+  VirtualScrollConfig,
   SortDirection,
-  SortState,
 } from './types'
 
 // Constants
@@ -19,3 +28,6 @@ export {
 
 // Utilities
 export { generateId, getValueByPath, sortData, flattenData, extractColumns } from './utils'
+
+// Data
+export { DataManager } from './data'
