@@ -1,39 +1,67 @@
-import type { FC } from 'react'
-import { extractColumns, type TableProps } from '@multi-table/shared'
+import type { FC, CSSProperties } from 'react'
+import type { TableData } from '@multi-table/shared'
+import { TableHeader, TableBody } from './components'
+import './styles.css'
 
-export type { TableProps as MultiTableProps }
+export interface MultiTableProps {
+  data: TableData
+  className?: string
+  style?: CSSProperties
+  showRowNumber?: boolean
+  striped?: boolean
+  bordered?: boolean
+  hoverable?: boolean
+  rowHeight?: number
+  headerHeight?: number
+}
 
-export const MultiTable: FC<TableProps> = ({ data, columns, bordered, striped, hoverable }) => {
-  const displayColumns = columns ?? extractColumns(data)
+export const MultiTable: FC<MultiTableProps> = ({
+  data,
+  className = '',
+  style,
+  showRowNumber = true,
+  striped = true,
+  bordered = true,
+  hoverable = true,
+  rowHeight = 40,
+  headerHeight = 44,
+}) => {
+  const { columns, rows } = data
+
+  const tableClassName = [
+    'multi-table',
+    bordered ? '' : 'multi-table--no-border',
+    striped ? 'multi-table--striped' : '',
+    hoverable ? '' : 'multi-table--no-hover',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  const rowStyle: CSSProperties = {
+    height: rowHeight,
+  }
+
+  const headerStyle: CSSProperties = {
+    height: headerHeight,
+  }
 
   return (
-    <div className="multi-table">
-      <table
-        className={[
-          bordered ? 'multi-table--bordered' : '',
-          striped ? 'multi-table--striped' : '',
-          hoverable ? 'multi-table--hoverable' : '',
-        ]
-          .filter(Boolean)
-          .join(' ')}
-      >
-        <thead>
-          <tr>
-            {displayColumns.map((col) => (
-              <th key={col}>{col}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((row, index) => (
-            <tr key={(row as { id?: string | number }).id ?? index}>
-              {displayColumns.map((col) => (
-                <td key={col}>{String(row[col] ?? '')}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className={tableClassName} style={style}>
+      <div className="multi-table-container">
+        <table className="multi-table-table">
+          <TableHeader columns={columns} showRowNumber={showRowNumber} style={headerStyle} />
+          <TableBody
+            rows={rows}
+            columns={columns}
+            showRowNumber={showRowNumber}
+            striped={striped}
+            style={rowStyle}
+          />
+        </table>
+      </div>
     </div>
   )
 }
+
+export type { MultiTableProps as TableProps }
