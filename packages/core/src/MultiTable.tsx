@@ -3,6 +3,8 @@ import type { TableData } from '@multi-table/shared'
 import { TableHeader, TableBody } from './components'
 import './styles.css'
 
+export type ThemeMode = 'light' | 'dark' | 'system'
+
 export interface MultiTableProps {
   data: TableData
   className?: string
@@ -13,6 +15,7 @@ export interface MultiTableProps {
   hoverable?: boolean
   rowHeight?: number
   headerHeight?: number
+  theme?: ThemeMode
 }
 
 export const MultiTable: FC<MultiTableProps> = ({
@@ -25,11 +28,13 @@ export const MultiTable: FC<MultiTableProps> = ({
   hoverable = true,
   rowHeight = 40,
   headerHeight = 44,
+  theme = 'system',
 }) => {
   const { columns, rows } = data
 
   const tableClassName = [
     'multi-table',
+    `multi-table--theme-${theme}`,
     bordered ? '' : 'multi-table--no-border',
     striped ? 'multi-table--striped' : '',
     hoverable ? '' : 'multi-table--no-hover',
