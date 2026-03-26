@@ -1,30 +1,78 @@
-.multi-table {
-  --mt-border-color: #e5e7eb;
-  --mt-header-bg: #f9fafb;
-  --mt-header-text: #374151;
-  --mt-row-hover: #f3f4f6;
-  --mt-row-stripe: #fafafa;
-  --mt-cell-text: #1f2937;
-  --mt-cell-padding: 10px 12px;
-  --mt-header-padding: 10px 12px;
-  --mt-font-size: 14px;
-  --mt-line-height: 1.5;
-  --mt-border-radius: 8px;
-  --mt-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+/* ============================================
+   CSS Variables - Design Tokens
+   ============================================ */
+:root {
+  /* Primary accent color */
+  --mt-primary: #2eaadc;
+  --mt-primary-light: rgba(46, 170, 220, 0.1);
+  --mt-primary-medium: rgba(46, 170, 220, 0.15);
 
+  /* Light theme (default) */
+  --mt-bg: #fff;
+  --mt-border-color: #e9e9e9;
+  --mt-header-bg: #fafafa;
+  --mt-header-text: #787774;
+  --mt-header-text-muted: #9b9a97;
+  --mt-row-hover: rgba(55, 53, 47, 0.04);
+  --mt-body-text: #37352f;
+  --mt-text-muted: #9b9a97;
+  --mt-scrollbar-thumb: rgba(55, 53, 47, 0.25);
+  --mt-scrollbar-thumb-hover: rgba(55, 53, 47, 0.4);
+}
+
+/* ============================================
+   Notion-style Table
+   ============================================ */
+.multi-table {
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: var(--mt-font-size);
-  line-height: var(--mt-line-height);
+  font-size: 14px;
+  line-height: 1.5;
   border: 1px solid var(--mt-border-color);
-  border-radius: var(--mt-border-radius);
+  border-radius: 6px;
   overflow: hidden;
-  box-shadow: var(--mt-shadow);
-  background: #fff;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  position: relative;
+  background: var(--mt-bg);
 }
 
 .multi-table-container {
   overflow-x: auto;
+  overflow-y: visible;
+}
+
+/* Custom scrollbar - hidden by default, show on hover */
+.multi-table-container::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.multi-table-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.multi-table-container::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.multi-table:hover .multi-table-container::-webkit-scrollbar-thumb {
+  background: var(--mt-scrollbar-thumb);
+}
+
+.multi-table:hover .multi-table-container::-webkit-scrollbar-thumb:hover {
+  background: var(--mt-scrollbar-thumb-hover);
+}
+
+/* Firefox scrollbar */
+.multi-table-container {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.multi-table:hover .multi-table-container {
+  scrollbar-color: var(--mt-scrollbar-thumb) transparent;
 }
 
 .multi-table-table {
@@ -37,23 +85,30 @@
 /* Header */
 .multi-table-header {
   background: var(--mt-header-bg);
-  border-bottom: 2px solid var(--mt-border-color);
+  border-bottom: 1px solid var(--mt-border-color);
 }
 
 .multi-table-header-cell {
-  padding: var(--mt-header-padding);
+  padding: 6px 12px;
   text-align: left;
-  font-weight: 600;
-  color: var(--mt-header-text);
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   user-select: none;
   position: relative;
+  font-size: 13px;
+  transition: background-color 0.15s ease;
+  border-right: 1px solid var(--mt-border-color);
+  color: var(--mt-header-text);
 }
 
-.multi-table-header-cell:not(:last-child) {
-  border-right: 1px solid var(--mt-border-color);
+.multi-table-header-cell:last-child {
+  border-right: none;
+}
+
+.multi-table-header-cell:hover {
+  background: var(--mt-row-hover);
 }
 
 .multi-table-header-cell-resizable {
@@ -66,6 +121,12 @@
   gap: 6px;
 }
 
+.multi-table-header-cell-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
 .multi-table-header-cell-title {
   flex: 1;
   overflow: hidden;
@@ -73,64 +134,76 @@
 }
 
 .multi-table-header-cell-type {
-  font-size: 12px;
-  color: #9ca3af;
+  font-size: 11px;
   font-weight: 400;
+  margin-left: 4px;
+  color: var(--mt-header-text-muted);
 }
 
 /* Row number */
 .multi-table-row-number {
-  width: 48px;
-  min-width: 48px;
+  width: 44px;
+  min-width: 44px;
   text-align: center;
-  color: #9ca3af;
   font-size: 12px;
+  font-weight: 400;
+  user-select: none;
+  border-right: 1px solid var(--mt-border-color);
+  color: var(--mt-text-muted);
+}
+
+.multi-table-body-row:hover .multi-table-row-number {
+  color: var(--mt-body-text);
 }
 
 /* Body */
 .multi-table-body-row {
-  transition: background-color 0.15s ease;
+  transition: background-color 0.1s ease;
+  height: 32px;
+}
+
+.multi-table--striped .multi-table-body-row:nth-child(even) {
+  background: transparent;
 }
 
 .multi-table-body-row:hover {
   background: var(--mt-row-hover);
 }
 
-.multi-table--striped .multi-table-body-row:nth-child(even) {
-  background: var(--mt-row-stripe);
-}
-
-.multi-table--striped .multi-table-body-row:nth-child(even):hover {
-  background: var(--mt-row-hover);
-}
-
 .multi-table-body-cell {
-  padding: var(--mt-cell-padding);
-  color: var(--mt-cell-text);
+  padding: 6px 12px;
   border-bottom: 1px solid var(--mt-border-color);
+  border-right: 1px solid var(--mt-border-color);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   position: relative;
+  font-size: 14px;
+  transition: background-color 0.1s ease;
+  color: var(--mt-body-text);
 }
 
-.multi-table-body-cell:not(:last-child) {
-  border-right: 1px solid var(--mt-border-color);
+.multi-table-body-cell:last-child {
+  border-right: none;
 }
 
 .multi-table-body-row:last-child .multi-table-body-cell {
   border-bottom: none;
 }
 
+.multi-table-body-cell:hover {
+  background: var(--mt-row-hover);
+}
+
 /* Selection */
 .multi-table-body-cell--selected {
-  background: #eff6ff;
-  box-shadow: inset 0 0 0 2px #3b82f6;
+  background: var(--mt-primary-light) !important;
+  box-shadow: inset 0 0 0 1.5px var(--mt-primary);
 }
 
 .multi-table-body-cell--active {
-  box-shadow: inset 0 0 0 2px #2563eb;
-  background: #dbeafe;
+  box-shadow: inset 0 0 0 2px var(--mt-primary);
+  background: var(--mt-primary-medium) !important;
 }
 
 /* Cell Types */
@@ -152,10 +225,10 @@
 }
 
 .multi-table-cell--checkbox input {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   cursor: pointer;
-  accent-color: #3b82f6;
+  accent-color: var(--mt-primary);
 }
 
 .multi-table-cell--select {
@@ -166,21 +239,18 @@
 .multi-table-cell-select-badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: 2px 6px;
+  border-radius: 3px;
   font-size: 12px;
   font-weight: 500;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.multi-table-cell--date {
-  color: #6b7280;
+  white-space: nowrap;
 }
 
 .multi-table-cell--url {
-  color: #2563eb;
+  color: var(--mt-primary);
   text-decoration: none;
 }
 
@@ -188,33 +258,38 @@
   text-decoration: underline;
 }
 
+.multi-table-cell--date {
+  color: var(--mt-header-text);
+}
+
 /* Empty */
 .multi-table-empty {
-  padding: 48px 24px;
+  padding: 32px 24px;
   text-align: center;
-  color: #9ca3af;
+  font-size: 14px;
+  color: var(--mt-text-muted);
 }
 
 .multi-table-empty-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+  opacity: 0.5;
 }
 
 /* Loading */
 .multi-table-loading {
-  padding: 48px 24px;
+  padding: 32px 24px;
   text-align: center;
-  color: #9ca3af;
+  color: var(--mt-text-muted);
 }
 
 .multi-table-loading-spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid var(--mt-border-color);
-  border-top-color: #3b82f6;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--mt-border-color);
+  border-top-color: var(--mt-primary);
   border-radius: 50%;
   animation: multi-table-spin 0.8s linear infinite;
-  margin: 0 auto 12px;
+  margin: 0 auto 8px;
 }
 
 @keyframes multi-table-spin {
@@ -237,20 +312,7 @@
 
 .multi-table-resize-handle:hover,
 .multi-table-resize-handle--active {
-  background: #3b82f6;
-}
-
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  .multi-table {
-    --mt-border-color: #374151;
-    --mt-header-bg: #1f2937;
-    --mt-header-text: #e5e7eb;
-    --mt-row-hover: #1f2937;
-    --mt-row-stripe: #111827;
-    --mt-cell-text: #f3f4f6;
-    background: #030712;
-  }
+  background: var(--mt-primary);
 }
 
 /* Fixed Columns */
@@ -268,4 +330,72 @@
   right: 0;
   background: inherit;
   z-index: 1;
+}
+
+/* Cell focus indicator for keyboard navigation */
+.multi-table-body-cell:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--mt-primary);
+}
+
+/* Placeholder text for empty cells */
+.multi-table-body-cell--empty::after {
+  content: 'Empty';
+  font-style: italic;
+  color: var(--mt-text-muted);
+}
+
+/* Checkbox hover effect */
+.multi-table-cell--checkbox:hover input {
+  transform: scale(1.1);
+}
+
+/* ============================================
+   Theme: Dark (forced)
+   ============================================ */
+.multi-table--theme-dark {
+  --mt-bg: #191919;
+  --mt-border-color: rgba(255, 255, 255, 0.07);
+  --mt-header-bg: #191919;
+  --mt-header-text: rgba(255, 255, 255, 0.6);
+  --mt-header-text-muted: rgba(255, 255, 255, 0.4);
+  --mt-row-hover: rgba(255, 255, 255, 0.04);
+  --mt-body-text: rgba(255, 255, 255, 0.9);
+  --mt-text-muted: rgba(255, 255, 255, 0.4);
+  --mt-scrollbar-thumb: rgba(255, 255, 255, 0.25);
+  --mt-scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
+}
+
+.multi-table--theme-dark .multi-table-header {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.multi-table--theme-dark .multi-table-loading-spinner {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   Theme: System (follows OS preference)
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  .multi-table--theme-system {
+    --mt-bg: #191919;
+    --mt-border-color: rgba(255, 255, 255, 0.07);
+    --mt-header-bg: #191919;
+    --mt-header-text: rgba(255, 255, 255, 0.6);
+    --mt-header-text-muted: rgba(255, 255, 255, 0.4);
+    --mt-row-hover: rgba(255, 255, 255, 0.04);
+    --mt-body-text: rgba(255, 255, 255, 0.9);
+    --mt-text-muted: rgba(255, 255, 255, 0.4);
+    --mt-scrollbar-thumb: rgba(255, 255, 255, 0.25);
+    --mt-scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
+  }
+
+  .multi-table--theme-system .multi-table-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .multi-table--theme-system .multi-table-loading-spinner {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
 }

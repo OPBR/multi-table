@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { MultiTable, VERSION } from '@multi-table/core'
+import { useState, useEffect } from 'react'
+import { MultiTable, VERSION, type ThemeMode } from '@multi-table/core'
 import type { TableData, Column, Row } from '@multi-table/shared'
 
 const createSampleData = (): TableData => {
@@ -126,6 +126,16 @@ const createLargeData = (count: number): TableData => {
 function App() {
   const [sampleData] = useState(() => createSampleData())
   const [largeData] = useState(() => createLargeData(50))
+  const [theme, setTheme] = useState<ThemeMode>('system')
+
+  useEffect(() => {
+    const html = document.documentElement
+    if (theme === 'dark') {
+      html.classList.add('dark')
+    } else {
+      html.classList.remove('dark')
+    }
+  }, [theme])
 
   return (
     <div className="app">
@@ -139,13 +149,40 @@ function App() {
 
       <main className="main">
         <section className="section">
+          <div className="section-header">
+            <h2>Theme</h2>
+            <div className="theme-selector">
+              <button
+                className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
+                onClick={() => setTheme('light')}
+              >
+                Light
+              </button>
+              <button
+                className={`theme-btn ${theme === 'dark' ? 'active' : ''}`}
+                onClick={() => setTheme('dark')}
+              >
+                Dark
+              </button>
+              <button
+                className={`theme-btn ${theme === 'system' ? 'active' : ''}`}
+                onClick={() => setTheme('system')}
+              >
+                System
+              </button>
+            </div>
+          </div>
+          <p className="section-desc">Choose between light, dark, or system color scheme.</p>
+        </section>
+
+        <section className="section">
           <h2>Basic Table</h2>
           <p className="section-desc">
             A simple table with various column types including text, number, select, email, and
             checkbox.
           </p>
           <div className="demo-container">
-            <MultiTable data={sampleData} />
+            <MultiTable data={sampleData} theme={theme} />
           </div>
         </section>
 
@@ -153,7 +190,7 @@ function App() {
           <h2>Large Dataset</h2>
           <p className="section-desc">Table with 50 rows demonstrating scrollable content.</p>
           <div className="demo-container">
-            <MultiTable data={largeData} />
+            <MultiTable data={largeData} theme={theme} />
           </div>
         </section>
 
@@ -161,7 +198,7 @@ function App() {
           <h2>Custom Options</h2>
           <p className="section-desc">Table with row numbers disabled and no stripes.</p>
           <div className="demo-container">
-            <MultiTable data={sampleData} showRowNumber={false} striped={false} />
+            <MultiTable data={sampleData} theme={theme} showRowNumber={false} striped={false} />
           </div>
         </section>
 
@@ -197,7 +234,7 @@ const data: TableData = {
 }
 
 function App() {
-  return <MultiTable data={data} />
+  return <MultiTable data={data} theme="light" />
 }`}</code>
           </pre>
         </section>
