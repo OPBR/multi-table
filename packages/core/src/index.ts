@@ -1,3 +1,5 @@
 export { MultiTable, type MultiTableProps, type TableProps, type ThemeMode } from './MultiTable'
 export { TableHeader, TableBody, TableCell } from './components'
+export { useSelection } from './hooks'
+export type { SelectionState, CellPosition, UseSelectionReturn } from './hooks'
 export { VERSION } from '@multi-table/shared'

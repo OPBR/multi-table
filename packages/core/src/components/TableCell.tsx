@@ -1,14 +1,17 @@
-import type { FC, CSSProperties } from 'react'
+import type { FC, CSSProperties, MouseEvent } from 'react'
 import type { Cell, CellValue, Column, SelectOption } from '@multi-table/shared'
 
 export interface TableCellProps {
   cell: Cell
   column: Column
   rowIndex: number
+  colIndex: number
   style?: CSSProperties
   className?: string
   selected?: boolean
   active?: boolean
+  onMouseDown?: (e: MouseEvent) => void
+  onMouseEnter?: (e: MouseEvent) => void
 }
 
 function formatCellValue(value: CellValue, column: Column): React.ReactNode {
@@ -116,6 +119,8 @@ export const TableCell: FC<TableCellProps> = ({
   className = '',
   selected,
   active,
+  onMouseDown,
+  onMouseEnter,
 }) => {
   const cellClassName = [
     'multi-table-body-cell',
@@ -127,7 +132,13 @@ export const TableCell: FC<TableCellProps> = ({
     .join(' ')
 
   return (
-    <td className={cellClassName} style={style}>
+    <td
+      className={cellClassName}
+      style={style}
+      onMouseDown={onMouseDown}
+      onMouseEnter={onMouseEnter}
+      tabIndex={active ? 0 : -1}
+    >
       {formatCellValue(cell.value, column)}
     </td>
   )
