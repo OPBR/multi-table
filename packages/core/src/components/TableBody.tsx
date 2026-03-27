@@ -1,4 +1,4 @@
-import type { FC, CSSProperties } from 'react'
+import type { FC, CSSProperties, MouseEvent } from 'react'
 import type { Row, Column, Cell } from '@multi-table/shared'
 import { TableCell } from './TableCell'
 
@@ -8,6 +8,10 @@ export interface TableBodyProps {
   showRowNumber?: boolean
   striped?: boolean
   style?: CSSProperties
+  isSelected?: (row: number, col: number) => boolean
+  isActive?: (row: number, col: number) => boolean
+  onCellMouseDown?: (row: number, col: number, e: MouseEvent) => void
+  onCellMouseEnter?: (row: number, col: number, e: MouseEvent) => void
 }
 
 export const TableBody: FC<TableBodyProps> = ({
@@ -16,6 +20,10 @@ export const TableBody: FC<TableBodyProps> = ({
   showRowNumber = false,
   striped = false,
   style,
+  isSelected,
+  isActive,
+  onCellMouseDown,
+  onCellMouseEnter,
 }) => {
   if (rows.length === 0) {
     return (
@@ -37,14 +45,22 @@ export const TableBody: FC<TableBodyProps> = ({
           {showRowNumber && (
             <td className="multi-table-body-cell multi-table-row-number">{rowIndex + 1}</td>
           )}
-          {columns.map((column) => {
+          {columns.map((column, colIndex) => {
             const cell: Cell = row.cells[column.key] || { value: null }
+            const selected = isSelected?.(rowIndex, colIndex) ?? false
+            const active = isActive?.(rowIndex, colIndex) ?? false
+
             return (
               <TableCell
                 key={`${row.id}-${column.key}`}
                 cell={cell}
                 column={column}
                 rowIndex={rowIndex}
+                colIndex={colIndex}
+                selected={selected}
+                active={active}
+                onMouseDown={(e) => onCellMouseDown?.(rowIndex, colIndex, e)}
+                onMouseEnter={(e) => onCellMouseEnter?.(rowIndex, colIndex, e)}
               />
             )
           })}
