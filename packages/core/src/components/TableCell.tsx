@@ -131,11 +131,16 @@ export const TableCell: FC<TableCellProps> = ({
     .filter(Boolean)
     .join(' ')
 
+  const handleMouseDown = (e: MouseEvent) => {
+    e.preventDefault() // Prevent text selection
+    onMouseDown?.(e)
+  }
+
   return (
     <td
       className={cellClassName}
       style={style}
-      onMouseDown={onMouseDown}
+      onMouseDown={handleMouseDown}
       onMouseEnter={onMouseEnter}
       tabIndex={active ? 0 : -1}
     >
